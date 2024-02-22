@@ -1,6 +1,7 @@
 const express=require("express")
 const app=express()
 const port=3000
+app.use(express.json());
 const db=require("./config/db")
 const Post=require("./models/Post")
 db().then(()=>console.log("Successfully connected to the Database")).catch(err => console.log(err));
@@ -19,24 +20,51 @@ app.get("/api/posts",(req,res)=>{
 //To get a specific post result
 app.get("/api/posts/:id",(req,res)=>{
     let postid=req.params.id;
-    Post.find({id:postid}).then((data)=>{
+    Post.find({_id:postid}).then((data)=>{
         res.status(200).json({data})
     }).catch((err)=>{
         res.status(500).json({message:err})
     })
     
 })
-app.get("/api/",(req,res)=>{
+//Create a new post
+app.post("/api/posts",(req,res)=>{
+    let newpost=new Post({
+        title:req.body.title,
+        description:req.body.description,
+    })
+    newpost.save().then((data)=>{
+        res.status(200).json({data})
+    }).catch((err)=>{
+        res.status(500).json({message:err})
+    })
+})
+//Updating a specific post
+app.put("/api/posts/:id",(req,res)=>{
+    let newid=req.params.id;
+    let newinfo={
+        title:req.body.title,
+        description:req.body.description,
+    }
+    Post.findByIdAndUpdate(newid,newinfo).then((data)=>{
+        res.status(200).json({message:"Successfully updated",data:data})
+    }).catch((err)=>{
+        res.status(500).json({message:err})
+    })
     
 })
-app.get("/api/",(req,res)=>{
-    
-})
-app.get("/api/",(req,res)=>{
-    
+//Deleting a specific post
+app.delete("/api/posts/:id",(req,res)=>{
+    let newid=req.params.id;
+    Post.findByIdAndDelete(newid).then((data)=>{
+        res.status(200).json({message:"Successfully deleted"})
+    }).catch((err)=>{
+        res.status(500).json({message:err})
+    })
 })
 app.listen(port,(err)=>{
     if(!err){
         console.log(`Server is up and running at ${port}`)
     }
 })
+
