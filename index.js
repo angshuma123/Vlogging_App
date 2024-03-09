@@ -1,6 +1,8 @@
 const express=require("express")
 const app=express()
-const port=3000
+const dotenv=require("dotenv")
+dotenv.config()
+const port=3000||process.env.PORT
 app.use(express.json());
 const db=require("./config/db")
 const Post=require("./models/Post")
@@ -62,7 +64,7 @@ app.delete("/api/posts/:id",(req,res)=>{
         res.status(500).json({message:err})
     })
 })
-app.listen(port,(err)=>{
+app.listen(port,"127.0.0.1",(err)=>{
     if(!err){
         console.log(`Server is up and running at ${port}`)
     }
