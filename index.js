@@ -3,7 +3,7 @@ const dotenv=require("dotenv")
 dotenv.config()
 const app=express()
 
-const port=3000||process.env.PORT
+const port=8000||process.env.PORT
 app.use(express.json());
 const db=require("./config/db")
 const Post=require("./models/Post")
