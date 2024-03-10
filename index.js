@@ -65,7 +65,7 @@ app.delete("/api/posts/:id",(req,res)=>{
         res.status(500).json({message:err})
     })
 })
-app.listen(port,"127.0.0.1",(err)=>{
+app.listen(port,"0.0.0.0",(err)=>{
     if(!err){
         console.log(`Server is up and running at ${port}`)
     }
